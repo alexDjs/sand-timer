@@ -254,6 +254,12 @@ function startTimer() {
             statusFull.textContent = "⏰ Time's up!";
             statusFull.className = 'status finished';
             playAlert();
+            
+            // Exit fullscreen mode when timer ends
+            if (isFullscreen) {
+                isFullscreen = false;
+                fullscreenOverlay.classList.remove('active');
+            }
             return;
         }
         
