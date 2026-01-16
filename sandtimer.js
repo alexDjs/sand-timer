@@ -253,7 +253,6 @@ function startTimer() {
             status.className = 'status finished';
             statusFull.textContent = "⏰ Time's up!";
             statusFull.className = 'status finished';
-            playAlert();
             
             // Exit fullscreen mode after 2 seconds
             if (isFullscreen) {
@@ -304,15 +303,6 @@ function stopTimer() {
     isRunning = false;
     isPaused = false;
     hideParticles();
-}
-
-function playAlert() {
-    // Browser alert sound (beep)
-    const audio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBSl+zO/aizsIHG/A7+OZQQ0PVqzn77BdGAU+ltryxnMpBSh7yu/ZizsHHG3A7+OZQQ0PVazn77BdGAU+ldryxnMpBSh7yu/ZizsHHG3A7+OZQQ0PVazn77BdGAU+ldryxnMpBSh7yu/ZizsHHG3A7+OZPw0PV63o8LJfGgZCm+P0y3ctBSyBzvLZizcIGWi77eeeTRAMUKfj8LZjHAY4kdfyzHksBSR3x/DdkEAKFF607+uoVRQKRp/g8r5sIQUpfszt2Ys7CBxvwe/jmUENj1as5++wXRgFPpXa8sZzKQUoe8rv2Ys7BxxtQO/jmT8ND1et6PCyXxoGQpvj9Mt3LQUsgc7y2Ys3CBlou+3nnk0QDFCn4/C2YxwGOJHX8sx5LAUkd8fw3ZBAC');
-    audio.play().catch(() => {
-        // Fallback if audio doesn't work
-        alert("⏰ Time's up!");
-    });
 }
 
 // Initialize
