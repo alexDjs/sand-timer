@@ -1,0 +1,558 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    color: white;
+}
+
+.container {
+    text-align: center;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+}
+
+h1 {
+    font-size: 2.5em;
+    margin-bottom: 30px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.timer-display {
+    font-size: 5em;
+    font-weight: bold;
+    margin: 30px 0;
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4);
+    font-family: 'Courier New', monospace;
+}
+
+.hourglass {
+    width: 150px;
+    height: 200px;
+    margin: 30px auto;
+    position: relative;
+}
+
+.hourglass svg {
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+}
+
+.sand-top, .sand-bottom {
+    transition: all 1s linear;
+}
+
+.sand-stream {
+    animation: fall 2s linear infinite;
+}
+
+@keyframes fall {
+    0% { opacity: 0; transform: translateY(0); }
+    50% { opacity: 1; }
+    100% { opacity: 0; transform: translateY(30px); }
+}
+
+.buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 30px 0;
+}
+
+button {
+    padding: 15px 25px;
+    font-size: 1.1em;
+    border: none;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.9);
+    color: #667eea;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    background: white;
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+button.active {
+    background: #667eea;
+    color: white;
+}
+
+.status {
+    font-size: 1.3em;
+    margin: 20px 0;
+    font-weight: bold;
+}
+
+.status.running {
+    color: #90EE90;
+}
+
+.status.finished {
+    color: #FFD700;
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.control-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.control-buttons button {
+    padding: 12px 30px;
+}
+
+/* Fullscreen mode styles */
+.fullscreen-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.fullscreen-overlay.active {
+    display: flex;
+}
+
+.fullscreen-content {
+    text-align: center;
+    animation: zoomIn 0.3s ease;
+}
+
+@keyframes zoomIn {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.fullscreen-overlay .hourglass {
+    width: 300px;
+    height: 400px;
+    margin: 40px auto;
+}
+
+.fullscreen-overlay .timer-display {
+    font-size: 10em;
+    margin: 20px 0;
+}
+
+.fullscreen-overlay .status {
+    font-size: 2em;
+}
+
+.clickable {
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.clickable:hover {
+    transform: scale(1.05);
+}
+
+.fullscreen-hint {
+    font-size: 0.9em;
+    color: rgba(255, 255, 255, 0.7);
+    margin-top: 10px;
+}
+
+/* Theme styles */
+.theme-selector {
+    margin: 20px 0;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+}
+
+.theme-selector h3 {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+
+.theme-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.theme-btn {
+    padding: 10px 15px;
+    font-size: 0.9em;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.theme-btn:hover {
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.theme-btn.active {
+    border-color: white;
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* Theme-specific hourglass styles */
+.hourglass.theme-classic path:first-child {
+    stroke: white;
+}
+.hourglass.theme-classic .sand-top,
+.hourglass.theme-classic .sand-bottom {
+    fill: #FFD700;
+}
+
+.hourglass.theme-glass path:first-child {
+    stroke: #E0F7FF;
+    stroke-width: 4;
+}
+.hourglass.theme-glass {
+    filter: drop-shadow(0 4px 12px rgba(173, 216, 230, 0.6));
+}
+.hourglass.theme-glass .sand-top,
+.hourglass.theme-glass .sand-bottom {
+    fill: url(#glassGradient);
+}
+
+.hourglass.theme-wood path:first-child {
+    stroke: #8B4513;
+    stroke-width: 5;
+}
+.hourglass.theme-wood .sand-top,
+.hourglass.theme-wood .sand-bottom {
+    fill: #D2691E;
+}
+
+.hourglass.theme-gold path:first-child {
+    stroke: #FFD700;
+    stroke-width: 4;
+}
+.hourglass.theme-gold {
+    filter: drop-shadow(0 4px 12px rgba(255, 215, 0, 0.5));
+}
+.hourglass.theme-gold .sand-top,
+.hourglass.theme-gold .sand-bottom {
+    fill: #FFA500;
+}
+
+.hourglass.theme-neon path:first-child {
+    stroke: #00FFFF;
+    stroke-width: 3;
+}
+.hourglass.theme-neon {
+    filter: drop-shadow(0 0 15px #00FFFF) drop-shadow(0 0 30px #00FFFF);
+}
+.hourglass.theme-neon .sand-top,
+.hourglass.theme-neon .sand-bottom {
+    fill: #FF00FF;
+}
+
+.hourglass.theme-ocean path:first-child {
+    stroke: #4169E1;
+    stroke-width: 4;
+}
+.hourglass.theme-ocean .sand-top,
+.hourglass.theme-ocean .sand-bottom {
+    fill: #1E90FF;
+}
+
+.hourglass.theme-fire path:first-child {
+    stroke: #FF4500;
+    stroke-width: 4;
+}
+.hourglass.theme-fire {
+    filter: drop-shadow(0 4px 12px rgba(255, 69, 0, 0.5));
+}
+.hourglass.theme-fire .sand-top,
+.hourglass.theme-fire .sand-bottom {
+    fill: url(#fireGradient);
+}
+
+.hourglass.theme-night path:first-child {
+    stroke: #C0C0C0;
+    stroke-width: 4;
+}
+.hourglass.theme-night {
+    filter: drop-shadow(0 4px 12px rgba(192, 192, 192, 0.4));
+}
+.hourglass.theme-night .sand-top,
+.hourglass.theme-night .sand-bottom {
+    fill: #E8E8E8;
+}
+
+/* Mobile optimization for Redmi 15 and other smartphones */
+@media screen and (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+
+    .container {
+        padding: 20px 15px;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    h1 {
+        font-size: 1.8em;
+        margin-bottom: 20px;
+    }
+
+    .timer-display {
+        font-size: 3.5em;
+        margin: 20px 0;
+    }
+
+    .hourglass {
+        width: 120px;
+        height: 160px;
+        margin: 20px auto;
+    }
+
+    .buttons {
+        gap: 10px;
+        margin: 20px 0;
+    }
+
+    button {
+        padding: 12px 18px;
+        font-size: 1em;
+    }
+
+    .control-buttons button {
+        padding: 10px 20px;
+        font-size: 1em;
+    }
+
+    .theme-selector {
+        padding: 10px;
+    }
+
+    .theme-selector h3 {
+        font-size: 1em;
+    }
+
+    .theme-buttons {
+        gap: 8px;
+    }
+
+    .theme-btn {
+        padding: 8px 12px;
+        font-size: 0.85em;
+    }
+
+    .status {
+        font-size: 1.1em;
+    }
+
+    .fullscreen-overlay .hourglass {
+        width: 200px;
+        height: 280px;
+    }
+
+    .fullscreen-overlay .timer-display {
+        font-size: 6em;
+    }
+
+    .fullscreen-overlay .status {
+        font-size: 1.5em;
+    }
+}
+
+/* Extra small screens (phones in portrait) */
+@media screen and (max-width: 480px) {
+    .container {
+        padding: 15px 10px;
+        border-radius: 15px;
+    }
+
+    h1 {
+        font-size: 1.5em;
+        margin-bottom: 15px;
+    }
+
+    .timer-display {
+        font-size: 2.8em;
+        margin: 15px 0;
+    }
+
+    .hourglass {
+        width: 100px;
+        height: 140px;
+        margin: 15px auto;
+    }
+
+    .buttons {
+        gap: 8px;
+        margin: 15px 0;
+    }
+
+    button {
+        padding: 10px 15px;
+        font-size: 0.9em;
+        border-radius: 8px;
+    }
+
+    .control-buttons {
+        gap: 10px;
+        margin-top: 15px;
+        flex-wrap: wrap;
+    }
+
+    .control-buttons button {
+        padding: 10px 18px;
+        font-size: 0.9em;
+    }
+
+    .theme-selector {
+        padding: 8px;
+        margin: 15px 0;
+    }
+
+    .theme-selector h3 {
+        font-size: 0.95em;
+        margin-bottom: 8px;
+    }
+
+    .theme-buttons {
+        gap: 6px;
+    }
+
+    .theme-btn {
+        padding: 7px 10px;
+        font-size: 0.8em;
+    }
+
+    .status {
+        font-size: 1em;
+        margin: 15px 0;
+    }
+
+    .fullscreen-hint {
+        font-size: 0.8em;
+        margin-top: 8px;
+    }
+
+    .fullscreen-overlay .hourglass {
+        width: 180px;
+        height: 250px;
+        margin: 30px auto;
+    }
+
+    .fullscreen-overlay .timer-display {
+        font-size: 4.5em;
+        margin: 15px 0;
+    }
+
+    .fullscreen-overlay .status {
+        font-size: 1.3em;
+    }
+
+    .fullscreen-overlay .fullscreen-hint {
+        font-size: 0.85em;
+    }
+}
+
+/* Landscape mode for small screens */
+@media screen and (max-height: 600px) and (orientation: landscape) {
+    .container {
+        padding: 15px;
+    }
+
+    h1 {
+        font-size: 1.3em;
+        margin-bottom: 10px;
+    }
+
+    .timer-display {
+        font-size: 2.2em;
+        margin: 10px 0;
+    }
+
+    .hourglass {
+        width: 80px;
+        height: 110px;
+        margin: 10px auto;
+    }
+
+    .theme-selector {
+        padding: 8px;
+        margin: 10px 0;
+    }
+
+    .theme-selector h3 {
+        font-size: 0.9em;
+        margin-bottom: 5px;
+    }
+
+    .buttons {
+        gap: 6px;
+        margin: 10px 0;
+    }
+
+    button {
+        padding: 8px 12px;
+        font-size: 0.85em;
+    }
+
+    .control-buttons {
+        gap: 8px;
+        margin-top: 10px;
+    }
+
+    .control-buttons button {
+        padding: 8px 15px;
+    }
+
+    .status {
+        font-size: 0.95em;
+        margin: 10px 0;
+    }
+
+    .fullscreen-hint {
+        font-size: 0.75em;
+    }
+}

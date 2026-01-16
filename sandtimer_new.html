@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>⏳ Sand Timer</title>
+    <link rel="stylesheet" href="sandtimer.css">
+</head>
+<body>
+    <div class="container">
+        <h1>⏳ Sand Timer</h1>
+        
+        <!-- Theme Selector -->
+        <div class="theme-selector">
+            <h3>🎨 Hourglass Theme</h3>
+            <div class="theme-buttons">
+                <button class="theme-btn active" onclick="changeTheme('classic')">Classic</button>
+                <button class="theme-btn" onclick="changeTheme('glass')">Glass</button>
+                <button class="theme-btn" onclick="changeTheme('wood')">Wood</button>
+                <button class="theme-btn" onclick="changeTheme('gold')">Gold</button>
+                <button class="theme-btn" onclick="changeTheme('neon')">Neon</button>
+                <button class="theme-btn" onclick="changeTheme('ocean')">Ocean</button>
+                <button class="theme-btn" onclick="changeTheme('fire')">Fire</button>
+                <button class="theme-btn" onclick="changeTheme('night')">Night</button>
+            </div>
+        </div>
+        
+        <div class="hourglass clickable theme-classic" id="hourglass" onclick="toggleFullscreen()">
+            <svg viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg">
+                <!-- Gradients for special effects -->
+                <defs>
+                    <linearGradient id="glassGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" style="stop-color:#87CEEB;stop-opacity:0.9" />
+                        <stop offset="100%" style="stop-color:#4682B4;stop-opacity:0.9" />
+                    </linearGradient>
+                    <linearGradient id="fireGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" style="stop-color:#FF4500;stop-opacity:0.9" />
+                        <stop offset="50%" style="stop-color:#FF8C00;stop-opacity:0.9" />
+                        <stop offset="100%" style="stop-color:#FFD700;stop-opacity:0.9" />
+                    </linearGradient>
+                </defs>
+                <!-- Hourglass outline -->
+                <path d="M 20 10 L 80 10 L 60 70 L 80 130 L 20 130 L 40 70 Z" 
+                      fill="none" stroke="white" stroke-width="3"/>
+                
+                <!-- Top sand -->
+                <path id="sandTop" class="sand-top"
+                      d="M 25 15 L 75 15 L 58 65 L 42 65 Z" 
+                      fill="#FFD700" opacity="0.9"/>
+                
+                <!-- Falling sand particles -->
+                <circle id="particle1" class="sand-stream" cx="50" cy="70" r="1.5" fill="#FFD700" opacity="0"/>
+                <circle id="particle2" class="sand-stream" cx="48" cy="68" r="1" fill="#FFD700" opacity="0" style="animation-delay: 0.2s"/>
+                <circle id="particle3" class="sand-stream" cx="52" cy="69" r="1" fill="#FFD700" opacity="0" style="animation-delay: 0.4s"/>
+                <circle id="particle4" class="sand-stream" cx="49" cy="71" r="1.2" fill="#FFD700" opacity="0" style="animation-delay: 0.6s"/>
+                <circle id="particle5" class="sand-stream" cx="51" cy="70" r="0.8" fill="#FFD700" opacity="0" style="animation-delay: 0.8s"/>
+                
+                <!-- Bottom sand -->
+                <path id="sandBottom" class="sand-bottom"
+                      d="M 25 125 L 75 125 L 75 125 L 25 125 Z" 
+                      fill="#FFD700" opacity="0.9"/>
+            </svg>
+        </div>
+
+        <div class="timer-display clickable" id="display" onclick="toggleFullscreen()">00:00</div>
+        
+        <div class="status" id="status">Select a timer</div>
+        <div class="fullscreen-hint">💡 Click on the timer to enter fullscreen mode</div>
+
+        <div class="buttons">
+            <button onclick="selectTimer(30)">30 sec</button>
+            <button onclick="selectTimer(60)">1 min</button>
+            <button onclick="selectTimer(300)">5 min</button>
+            <button onclick="selectTimer(600)">10 min</button>
+            <button onclick="selectTimer(1800)">30 min</button>
+        </div>
+
+        <div class="control-buttons">
+            <button onclick="startTimer()" id="startBtn">▶ Start</button>
+            <button onclick="pauseTimer()" id="pauseBtn">⏸ Pause</button>
+            <button onclick="resetTimer()" id="resetBtn">↻ Reset</button>
+        </div>
+    </div>
+
+    <!-- Fullscreen overlay -->
+    <div class="fullscreen-overlay" id="fullscreenOverlay" onclick="toggleFullscreen()">
+        <div class="fullscreen-content">
+            <div class="hourglass theme-classic" id="hourglassFull">
+                <svg viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Gradients -->
+                    <defs>
+                        <linearGradient id="glassGradientFull" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" style="stop-color:#87CEEB;stop-opacity:0.9" />
+                            <stop offset="100%" style="stop-color:#4682B4;stop-opacity:0.9" />
+                        </linearGradient>
+                        <linearGradient id="fireGradientFull" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" style="stop-color:#FF4500;stop-opacity:0.9" />
+                            <stop offset="50%" style="stop-color:#FF8C00;stop-opacity:0.9" />
+                            <stop offset="100%" style="stop-color:#FFD700;stop-opacity:0.9" />
+                        </linearGradient>
+                    </defs>
+                    
+                    <!-- Hourglass outline -->
+                    <path d="M 20 10 L 80 10 L 60 70 L 80 130 L 20 130 L 40 70 Z" 
+                          fill="none" stroke="white" stroke-width="3"/>
+                    
+                    <!-- Top sand -->
+                    <path id="sandTopFull" class="sand-top"
+                          d="M 25 15 L 75 15 L 58 65 L 42 65 Z" 
+                          fill="#FFD700" opacity="0.9"/>
+                    
+                    <!-- Falling sand particles -->
+                    <circle id="particle1Full" class="sand-stream" cx="50" cy="70" r="1.5" fill="#FFD700" opacity="0"/>
+                    <circle id="particle2Full" class="sand-stream" cx="48" cy="68" r="1" fill="#FFD700" opacity="0" style="animation-delay: 0.2s"/>
+                    <circle id="particle3Full" class="sand-stream" cx="52" cy="69" r="1" fill="#FFD700" opacity="0" style="animation-delay: 0.4s"/>
+                    <circle id="particle4Full" class="sand-stream" cx="49" cy="71" r="1.2" fill="#FFD700" opacity="0" style="animation-delay: 0.6s"/>
+                    <circle id="particle5Full" class="sand-stream" cx="51" cy="70" r="0.8" fill="#FFD700" opacity="0" style="animation-delay: 0.8s"/>
+                    
+                    <!-- Bottom sand -->
+                    <path id="sandBottomFull" class="sand-bottom"
+                          d="M 25 125 L 75 125 L 75 125 L 25 125 Z" 
+                          fill="#FFD700" opacity="0.9"/>
+                </svg>
+            </div>
+            
+            <div class="timer-display" id="displayFull">00:00</div>
+            <div class="status" id="statusFull">Running...</div>
+            <div class="fullscreen-hint">Click anywhere to exit fullscreen</div>
+        </div>
+    </div>
+
+    <script src="sandtimer.js"></script>
+</body>
+</html>
