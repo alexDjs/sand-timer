@@ -6,6 +6,17 @@ let isPaused = false;
 let isFullscreen = false;
 let currentTheme = 'classic';
 
+// Music tracks
+const musicTracks = [
+    'music/Deva Premal Chamasas The Essence 1998 — Shima Shima (www.lightaudio.ru).mp3',
+    'music/Deva Premal — Gayatri Mantra (1998) The Essence) (www.lightaudio.ru).mp3',
+    'music/Deva Premal — Gayatri Mantra (The Essence, 1998) (www.lightaudio.ru).mp3',
+    'music/Deva Premal — Om Namo (1998) The Essence) (www.lightaudio.ru).mp3',
+    'music/Deva Premal — Sammasati (The Essence, 1998) (www.lightaudio.ru).mp3'
+];
+
+let backgroundMusic = null;
+
 const display = document.getElementById('display');
 const status = document.getElementById('status');
 const sandTop = document.getElementById('sandTop');
@@ -43,6 +54,35 @@ function showParticles() {
 function hideParticles() {
     particles.forEach(p => p.style.display = 'none');
     particlesFull.forEach(p => p.style.display = 'none');
+}
+
+function playRandomMusic() {
+    // Stop current music if playing
+    if (backgroundMusic) {
+        backgroundMusic.pause();
+        backgroundMusic = null;
+    }
+    
+    // Select random track
+    const randomIndex = Math.floor(Math.random() * musicTracks.length);
+    const selectedTrack = musicTracks[randomIndex];
+    
+    // Create and play new audio
+    backgroundMusic = new Audio(selectedTrack);
+    backgroundMusic.volume = 0.3; // 30% volume
+    backgroundMusic.loop = true; // Loop the track
+    
+    backgroundMusic.play().catch(err => {
+        console.log('Music playback failed:', err);
+    });
+}
+
+function stopMusic() {
+    if (backgroundMusic) {
+        backgroundMusic.pause();
+        backgroundMusic.currentTime = 0;
+        backgroundMusic = null;
+    }
 }
 
 function toggleFullscreen() {
@@ -202,11 +242,13 @@ function startTimer() {
     statusFull.textContent = 'Running...';
     statusFull.className = 'status running';
     showParticles(); // Show falling sand
+    playRandomMusic(); // Start background music
     
     timer = setInterval(() => {
         if (timeRemaining <= 0) {
             stopTimer();
             hideParticles();
+            stopMusic(); // Stop music when timer ends
             status.textContent = "⏰ Time's up!";
             status.className = 'status finished';
             statusFull.textContent = "⏰ Time's up!";
@@ -231,6 +273,7 @@ function pauseTimer() {
     statusFull.textContent = 'Paused';
     statusFull.className = 'status';
     hideParticles(); // Hide falling sand when paused
+    stopMusic(); // Stop music when paused
 }
 
 function resetTimer() {
@@ -243,6 +286,7 @@ function resetTimer() {
     statusFull.className = 'status';
     resetSand();
     hideParticles();
+    stopMusic(); // Stop music when reset
     isFullscreen = false;
     fullscreenOverlay.classList.remove('active');
 }
