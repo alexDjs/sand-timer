@@ -255,10 +255,12 @@ function startTimer() {
             statusFull.className = 'status finished';
             playAlert();
             
-            // Exit fullscreen mode when timer ends
+            // Exit fullscreen mode after 2 seconds
             if (isFullscreen) {
-                isFullscreen = false;
-                fullscreenOverlay.classList.remove('active');
+                setTimeout(() => {
+                    isFullscreen = false;
+                    fullscreenOverlay.classList.remove('active');
+                }, 2000);
             }
             return;
         }
